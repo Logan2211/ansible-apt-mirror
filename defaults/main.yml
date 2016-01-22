@@ -1,0 +1,6 @@
+---
+
+apt_mirror_base_path: /var/spool/apt-mirror
+apt_mirror_links: []
+apt_mirror_user: apt-mirror
+apt_mirror_group: apt-mirror

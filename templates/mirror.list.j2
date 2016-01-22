@@ -1,0 +1,29 @@
+# {{ ansible_managed }}
+
+############# config ##################
+#
+set base_path    {{ apt_mirror_base_path }}
+#
+# set mirror_path  $base_path/mirror
+# set skel_path    $base_path/skel
+# set var_path     $base_path/var
+# set cleanscript $var_path/clean.sh
+# set defaultarch  <running host architecture>
+# set postmirror_script $var_path/postmirror.sh
+# set run_postmirror 0
+set nthreads     20
+set _tilde 0
+#
+############# end config ##############
+
+{% for i in apt_mirror_repos %}
+{% if i.components is defined and i.components | length > 1 %}
+{% set components = i.components | join(' ') %}
+{% else %}{% set components = i.components | default('main') %}
+{% endif %}
+{{ i.debtype | default('deb') }} {{ i.url }} {{ apt_mirror_distribution | default(ansible_distribution_release) }} {{ components }}
+{% endfor %}
+
+{% for i in apt_mirror_repos %}
+clean {{ i.url }}
+{% endfor %}

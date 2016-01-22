@@ -1,0 +1,15 @@
+galaxy_info:
+  author: logan
+  description: Deployment of apt-mirror
+  license: Apache2
+  min_ansible_version: 1.6.6
+  platforms:
+    - name: Ubuntu
+      versions:
+        - trusty
+  categories:
+    - apt
+    - package
+    - repository
+    - mirror
+dependencies: []

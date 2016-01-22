@@ -1,0 +1,44 @@
+---
+
+- name: Ensure apt-mirror base directory exists
+  file:
+    path: "{{ apt_mirror_base_path }}"
+    state: directory
+    owner: "{{ apt_mirror_user }}"
+    group: "{{ apt_mirror_group }}"
+    mode: "0755"
+  tags:
+    - apt-mirror-config
+
+- name: Drop apt-mirror configurations
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "root"
+    group: "root"
+    mode: "{{ item.mode | default('0644') }}"
+  with_items:
+    - { src: "mirror.list.j2", dest: "/etc/apt/mirror.list" }
+    - { src: "apt-mirror.cron.j2", dest: "/etc/cron.daily/apt-mirror", mode: "0755" }
+  tags:
+    - apt-mirror-config
+
+- name: Run apt-mirror
+  command: /etc/cron.daily/apt-mirror
+  become: yes
+  become_user: "{{ apt_mirror_user }}"
+  register: apt_mirror_run
+  until: apt_mirror_run|success
+  tags:
+    - apt-mirror-run
+
+- name: Create links to mirror
+  file:
+    src: "{{ apt_mirror_base_path }}/mirror"
+    dest: "{{ item.path }}"
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}"
+    state: link
+  with_items: apt_mirror_links
+  tags:
+    - apt-mirror-links

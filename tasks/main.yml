@@ -1,0 +1,4 @@
+---
+
+- include: apt_mirror_install.yml
+- include: apt_mirror_postinstall.yml
