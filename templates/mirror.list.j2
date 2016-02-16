@@ -21,7 +21,7 @@ set _tilde 0
 {% set components = i.components | join(' ') %}
 {% else %}{% set components = i.components | default('main') %}
 {% endif %}
-{{ i.debtype | default('deb') }} {{ i.url }} {{ apt_mirror_distribution | default(ansible_distribution_release) }} {{ components }}
+{{ i.debtype | default('deb') }} {{ i.url }} {{ i.distribution | default(ansible_distribution_release) }} {{ components }}
 {% endfor %}
 
 {% for i in apt_mirror_repos %}
