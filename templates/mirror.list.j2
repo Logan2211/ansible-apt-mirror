@@ -17,7 +17,7 @@ set _tilde 0
 ############# end config ##############
 
 {% for i in apt_mirror_repos %}
-{% if i.components is defined and i.components | length > 1 %}
+{% if i.components is defined and i.components is not string %}
 {% set components = i.components | join(' ') %}
 {% else %}{% set components = i.components | default('main') %}
 {% endif %}
